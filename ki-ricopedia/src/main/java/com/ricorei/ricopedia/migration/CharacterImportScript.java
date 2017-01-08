@@ -16,13 +16,12 @@ import org.kralandce.krapi.core.model.kraland.MKWealth;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.ricorei.ricopedia.migration.ScriptUtil.getPath;
+import static com.ricorei.ricopedia.migration.ScriptUtil.sqlToJavaDateTime;
 
 /**
  * Transitional script used to migrate Ricopedia database to the new API format.
@@ -62,10 +61,9 @@ final class CharacterImportScript {
     }
 
     public void readFromJSON(String version) throws IOException, JsonParserException {
-        String home = System.getProperty("user.home");
-        Path ppersonagePath = Paths.get(home, "KralandCE", version, "ppersonnage.json");
-        Path listhashPath = Paths.get(home, "KralandCE", version, "listhash.json");
-        Path listavatarPath = Paths.get(home, "KralandCE", version, "listavatar.json");
+        Path ppersonagePath = getPath(version, "ppersonnage.json");
+        Path listhashPath = getPath(version, "listhash.json");
+        Path listavatarPath = getPath(version, "listavatar.json");
 
         JsonArray ppersonnageJArray = JsonParser.array().from(Files.readAllLines(ppersonagePath).get(0));
         JsonArray listhashJArray = JsonParser.array().from(Files.readAllLines(listhashPath).get(0));
@@ -100,14 +98,14 @@ final class CharacterImportScript {
     }
 
     private AdditionalData createAdditionalData(JsonObject main) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
 
         AdditionalData more = new AdditionalData();
 
-        more.setCreation(LocalDateTime.parse(main.getString("date_creation"), dateTimeFormatter).toLocalDate());
+        more.setCreation(sqlToJavaDateTime(main.getString("date_creation")).toLocalDate());
 
         if( !main.isNull("date_disparition") ) {
-            more.setDeletion(LocalDateTime.parse(main.getString("date_creation"), dateTimeFormatter).toLocalDate());
+            more.setDeletion(sqlToJavaDateTime(main.getString("date_creation")).toLocalDate());
         }
 
         String refHashAsString = main.getString("ref_hash");
