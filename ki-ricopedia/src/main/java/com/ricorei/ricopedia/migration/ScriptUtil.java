@@ -29,9 +29,28 @@ final class ScriptUtil {
         return Paths.get(home, "KralandCE", version, fileName);
     }
 
-    public static JsonArray readJsonArray(String version, String fileName) {
+    public static Path getSplitEventPath(String version) {
+        String home = System.getProperty("user.home");
+        return Paths.get(home, "KralandCE", version, "events");
+    }
 
-        Path path = getPath(version, fileName);
+    public static Path getSplitEventFilePath(String version, String splitFile) {
+        String home = System.getProperty("user.home");
+        return Paths.get(home, "KralandCE", version, "events", splitFile);
+    }
+
+    public static JsonArray readJsonArrayWithoutHeader(String version, Path path) {
+        try(BufferedReader bufferedReader = Files.newBufferedReader(path)) {
+            return JsonParser.array().from(bufferedReader);
+        }
+        catch(JsonParserException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static JsonArray readJsonArrayWithHeader(String version, Path path) {
 
         //There is a header in exported JSON files from phpmyadmin
         //Header is using 8 lines
@@ -49,6 +68,11 @@ final class ScriptUtil {
         }
 
         return null;
+    }
+
+    public static JsonArray readJsonArrayWithHeader(String version, String fileName) {
+
+        return readJsonArrayWithHeader(version, getPath(version, fileName));
     }
 
 }

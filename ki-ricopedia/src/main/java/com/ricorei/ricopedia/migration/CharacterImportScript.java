@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.util.HashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.ricorei.ricopedia.migration.ScriptUtil.readJsonArray;
 import static com.ricorei.ricopedia.migration.ScriptUtil.sqlToJavaDateTime;
 
 /**
@@ -58,9 +57,9 @@ final class CharacterImportScript {
     }
 
     public void readFromJSON(String version) throws IOException, JsonParserException {
-        JsonArray ppersonnageJArray = readJsonArray(version, "ppersonnage.json");
-        JsonArray listhashJArray = readJsonArray(version, "listhash.json");
-        JsonArray listavatarJArray = readJsonArray(version, "listavatar.json");
+        JsonArray ppersonnageJArray = ScriptUtil.readJsonArrayWithHeader(version, "ppersonnage.json");
+        JsonArray listhashJArray = ScriptUtil.readJsonArrayWithHeader(version, "listhash.json");
+        JsonArray listavatarJArray = ScriptUtil.readJsonArrayWithHeader(version, "listavatar.json");
 
         for( int i = 0; i < listavatarJArray.size(); i++ ) {
             JsonObject entry = listavatarJArray.getObject(i);
