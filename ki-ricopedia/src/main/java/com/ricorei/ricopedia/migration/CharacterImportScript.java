@@ -2,7 +2,6 @@ package com.ricorei.ricopedia.migration;
 
 import com.grack.nanojson.JsonArray;
 import com.grack.nanojson.JsonObject;
-import com.grack.nanojson.JsonParser;
 import com.grack.nanojson.JsonParserException;
 import org.kralandce.krapi.core.bean.ImmutableKPeople;
 import org.kralandce.krapi.core.bean.KPeople;
@@ -14,13 +13,11 @@ import org.kralandce.krapi.core.model.kraland.MKSex;
 import org.kralandce.krapi.core.model.kraland.MKWealth;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.HashMap;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.ricorei.ricopedia.migration.ScriptUtil.getPath;
+import static com.ricorei.ricopedia.migration.ScriptUtil.readJsonArray;
 import static com.ricorei.ricopedia.migration.ScriptUtil.sqlToJavaDateTime;
 
 /**
@@ -61,13 +58,9 @@ final class CharacterImportScript {
     }
 
     public void readFromJSON(String version) throws IOException, JsonParserException {
-        Path ppersonagePath = getPath(version, "ppersonnage.json");
-        Path listhashPath = getPath(version, "listhash.json");
-        Path listavatarPath = getPath(version, "listavatar.json");
-
-        JsonArray ppersonnageJArray = JsonParser.array().from(Files.readAllLines(ppersonagePath).get(0));
-        JsonArray listhashJArray = JsonParser.array().from(Files.readAllLines(listhashPath).get(0));
-        JsonArray listavatarJArray = JsonParser.array().from(Files.readAllLines(listavatarPath).get(0));
+        JsonArray ppersonnageJArray = readJsonArray(version, "ppersonnage.json");
+        JsonArray listhashJArray = readJsonArray(version, "listhash.json");
+        JsonArray listavatarJArray = readJsonArray(version, "listavatar.json");
 
         for( int i = 0; i < listavatarJArray.size(); i++ ) {
             JsonObject entry = listavatarJArray.getObject(i);
