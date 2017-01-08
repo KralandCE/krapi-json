@@ -20,5 +20,10 @@
             <artifactId>ki-people-parser</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.kralandce.krapi.core</groupId>
+            <artifactId>ki-event-parser</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>
