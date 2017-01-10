@@ -52,12 +52,8 @@ public final class EventJsonIO {
     public static final class Version1Minor0 {
 
         private static final JsonContract SINGLE_EVENT_CONTRACT = JsonContract.builder()
-            .add(IntegerField.of("year"))
-            .add(IntegerField.of("month"))
-            .add(IntegerField.of("day"))
             .add(IntegerField.of("hour"))
             .add(IntegerField.of("minute"))
-            .add(IntegerField.of("second"))
             .add(IntegerField.of("nation"))
             .add(StringField.of("province"))
             .add(StringField.of("city"))
