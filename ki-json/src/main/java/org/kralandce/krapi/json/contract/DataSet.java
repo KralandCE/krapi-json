@@ -1,6 +1,7 @@
 package org.kralandce.krapi.json.contract;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -22,23 +23,30 @@ public final class DataSet {
         return this.values.get(label);
     }
 
-    public boolean validate(DataContract contract) {
-        for( FieldContract fieldContract : contract ) {
+    private boolean validate(FieldContract fieldContract) {
 
-            // Keys must be set, even if value is null
-            if( !this.values.containsKey(fieldContract.getLabel()) ) {
+        // Keys must be set, even if value is null
+        if( !this.values.containsKey(fieldContract.getFieldLabel()) ) {
+            return false;
+        }
+
+        Object value = this.values.get(fieldContract.getFieldLabel());
+
+        // If key is set and if value is not null, value must be of the right class
+        if( value != null ) {
+            if( !fieldContract.isClass(value.getClass()) ) {
                 return false;
             }
+        }
 
-            Object value = this.values.get(fieldContract.getLabel());
+        return true;
+    }
 
-            // If key is set and if value is not null, value must be of the right class
-            if( value != null ) {
-                if( !value.getClass().equals(fieldContract.getFieldClass()) ) {
-                    return false;
-                }
+    public boolean validate(List<? extends FieldContract> fieldContracts) {
+        for( FieldContract fieldContract : fieldContracts ) {
+            if( !validate(fieldContract) ) {
+                return false;
             }
-
         }
 
         return true;

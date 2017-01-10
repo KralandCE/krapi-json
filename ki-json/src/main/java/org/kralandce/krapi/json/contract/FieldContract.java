@@ -1,25 +1,12 @@
 package org.kralandce.krapi.json.contract;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+public interface FieldContract {
 
-public final class FieldContract {
-    private final String label;
-    private final Class type;
+    public String getFieldLabel();
 
-    private FieldContract(String fieldLabel, Class fieldType) {
-        this.label = checkNotNull(fieldLabel);
-        this.type = checkNotNull(fieldType);
-    }
+    public Class getFieldClass();
 
-    public static FieldContract of(String fieldLabel, Class fieldClass) {
-        return new FieldContract(fieldLabel, fieldClass);
-    }
-
-    public String getLabel() {
-        return this.label;
-    }
-
-    public Class getFieldClass() {
-        return this.type;
+    default public boolean isClass(Class clazz) {
+        return getFieldClass().equals(clazz);
     }
 }
