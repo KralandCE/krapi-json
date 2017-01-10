@@ -51,6 +51,11 @@ public final class EventJsonIO {
 
     public static final class Version1Minor0 {
 
+        private static final int VERSION_MAJOR = 1;
+        private static final int VERSION_MINOR = 0;
+
+        private static final DataSet VERSION_DATASET = new DataSet().add("major", VERSION_MAJOR).add("minor", VERSION_MINOR);
+
         private static final JsonContract SINGLE_EVENT_CONTRACT = JsonContract.builder()
             .add(IntegerField.of("hour"))
             .add(IntegerField.of("minute"))
@@ -60,7 +65,6 @@ public final class EventJsonIO {
             .add(StringField.of("type"))
             .add(StringField.of("content"))
             .build();
-        private static final DataSet VERSION_DATASET = new DataSet().add("major", 1).add("minor", 0);
 
         private Version1Minor0() {
 
